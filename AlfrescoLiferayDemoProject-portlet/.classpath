@@ -100,5 +100,6 @@
 	<classpathentry kind="lib" path="docroot/WEB-INF/lib/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="lib" path="docroot/WEB-INF/lib/xpp3-1.1.4c.jar"/>
 	<classpathentry kind="lib" path="docroot/WEB-INF/lib/jmimemagic-0.1.2-sources.jar"/>
+	<classpathentry kind="lib" path="docroot/WEB-INF/lib/alfresco-remote-api-484-2.9.3B.jar"/>
 	<classpathentry kind="output" path="docroot/WEB-INF/classes"/>
 </classpath>

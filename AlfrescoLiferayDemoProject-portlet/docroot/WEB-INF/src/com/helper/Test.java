@@ -5,11 +5,14 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
+import org.apache.chemistry.opencmis.client.api.ItemIterable;
 import org.apache.chemistry.opencmis.client.api.OperationContext;
+import org.apache.chemistry.opencmis.client.api.QueryResult;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.api.SessionFactory;
 import org.apache.chemistry.opencmis.client.runtime.OperationContextImpl;
@@ -17,6 +20,7 @@ import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
+import org.apache.chemistry.opencmis.commons.data.PropertyData;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
  
@@ -34,6 +38,64 @@ public class Test {
 		OperationContext oc = new OperationContextImpl();
 
 		Folder root = lSession.getRootFolder();
+	
+		
+		Session cmisSession = lSession;
+		String cql = "SELECT * FROM cmis:document WHERE CONTAINS('PATH:\"/app:company_home/cm:CMISDocuments/cm:portal-ext.properties\"')";
+		int maxItems = 30;
+		oc.setMaxItemsPerPage(maxItems);
+		ArrayList<Floder> floderList = new ArrayList<Floder>();
+
+		try {
+			ItemIterable<QueryResult> results = cmisSession.query(cql, false,
+					oc);
+
+			for (QueryResult result : results) {
+				int i = 0;
+				Floder floder = new Floder();
+
+				for (PropertyData<?> prop : result.getProperties()) {
+					++i;
+					switch (i) {
+
+					case 11:
+						floder.setFileName(prop.getFirstValue().toString());
+						break;
+
+					default:
+						break;
+					}
+					
+					 
+
+					System.out
+							.println(prop.getQueryName()+"" + prop.getFirstValue());
+
+				}
+				floderList.add(floder);
+
+				System.out.println("--------------------------------------");
+			}
+
+			System.out.println("--------------------------------------");
+			System.out.println("Total number: " + results.getTotalNumItems()
+					+ "data");
+			System.out.println("Has more: " + results.getHasMoreItems());
+
+			System.out.println("--------------------------------------");
+		} catch (Exception e) {
+e.printStackTrace();
+		}
+		/*ItemIterable<QueryResult> results = lSession.query("SELECT * FROM cmis:folder where path('/d1ff0daa-4d90-438a-a724-13a290b65ac1')", false);
+		try {
+		    for (QueryResult result : results) {
+		   String     folderId = result.getPropertyValueById(PropertyIds.OBJECT_ID);
+		        Folder folder = (Folder) lSession.getObject(folderId);
+		        System.out.println("Folder Name " + folder.getName());
+		    }
+		} catch(Exception e) {
+		    e.printStackTrace();
+		}*/
 		System.out.println(root.getId());
                /* Map<String, Object> folderProperties = new HashMap<String, Object>();
                 folderProperties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:folder");

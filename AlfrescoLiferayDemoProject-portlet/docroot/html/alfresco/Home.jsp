@@ -1,3 +1,5 @@
+<%@page import="org.alfresco.webservice.util.AuthenticationUtils"%>
+<%@page import="org.alfresco.webservice.util.WebServiceFactory"%>
 <%@page import="com.helper.Floder"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -22,6 +24,7 @@
 <%ArrayList<Floder> floderList=(ArrayList<Floder>)request.getAttribute("floderList");
 String rootfloder="";
 String flooderRootid="";
+System.out.println("floder size---------------------->"+floderList.size());
 try{
 	
 	flooderRootid=(String)request.getAttribute("floderId");
@@ -67,17 +70,26 @@ System.out.print("root"+rootfloder);
 	</a>
 	</td>
 	</tr>
-<%}else{%>
+<%}else{
+request.setAttribute("fileDetails", floder);
+%>
 <tr><td>
 <portlet:actionURL var="file" name="fileView">
-
-
-	
-
+ <portlet:param name="createdBy" value="<%=floder.getFileCreatedBy()%>"/>
+ <portlet:param name="modefiedBy" value="<%=floder.getFilelLastModefiedBy()%>"/>
+	 <portlet:param name="createdDate" value="<%=floder.getDateFileCreated().toString()%>"/>
+	 
+	 	 <portlet:param name="modefiedDate" value="<%=floder.getDateFileCreated().toString()%>"/>
+	 	 	 <portlet:param name="type" value="<%=floder.getFileType()%>"/>
+	 	 	 <portlet:param name="version" value="<%=floder.getVersion()%>"/>
+	 
+ <portlet:param name="fileName" value="<%=floder.getFileName()%>"/>
         <portlet:param name="fileName" value="<%=floder.getFileName()%>"/>
                 <portlet:param name="fileId" value="<%=floder.getFileId()%>"/>
         
     </portlet:actionURL>
+    
+ 
     
     <a href="<%=file%>">
 <% out.println(floder.getFileName());%></a>
@@ -124,7 +136,7 @@ String uploadProgressId = PwdGenerator.getPassword(PwdGenerator.KEY3, 4);
 </portlet:actionURL>
 
 <aui:form action="<%= editCaseURL %>" enctype="multipart/form-data" method="post" >
-<aui:input type="file" name="fileName" size="75"/>
+<aui:input type="file" name="fileName" size="75" />
 
 <aui:input type="hidden" name="root" size="75"/>
 <input type="submit" value="<liferay-ui:message key="upload" />" onClick="<%= uploadProgressId %>.startProgress(); return true;"/>

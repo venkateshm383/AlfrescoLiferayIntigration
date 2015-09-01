@@ -1,5 +1,7 @@
 package com.action;
 
+
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -15,6 +18,14 @@ import javax.portlet.PortletException;
 import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+
+import org.alfresco.repo.webservice.types.Predicate;
+import org.alfresco.webservice.types.Reference;
+import org.alfresco.webservice.types.Store;
+
+import org.alfresco.webservice.util.AuthenticationUtils;
+import org.alfresco.webservice.util.Constants;
+import org.alfresco.webservice.util.WebServiceFactory;
 
 import com.alfresco.api.example.BaseOnPremExample;
 import com.alfresco.api.example.CmisBasicQuery;
@@ -108,9 +119,49 @@ public class alfresco extends MVCPortlet {
 		
 		String fileName=request.getParameter("fileName");
 		String fileId=request.getParameter("fileId");
+		String createdBy=request.getParameter("createdBy");
+		String modefiedBy=request.getParameter("modefiedBy");
+		String createdDate=request.getParameter("createdDate");
+		String modefiedDate=request.getParameter("modefiedDate");
+		String type=request.getParameter("type");
+		String version=request.getParameter("version");
+		
+		Floder floder=new Floder();
+		floder.setFileName(fileName);
+		floder.setDateFileCreated(new Date(createdDate));
+		floder.setDateOfLastModefied(new Date(modefiedDate));
+		floder.setFileCreatedBy(createdBy);
+		floder.setFileType(type);
+		floder.setFilelLastModefiedBy(modefiedBy);
+		floder.setVersion(version);
+
+			 System.out.println("hello");
+	
 String ticket="";
+request.setAttribute("filelist", floder);
 		request.setAttribute("fileName", fileName);
-		request.setAttribute("file", "http://52.19.4.0:8080/share/proxy/alfresco/slingshot/node/content/workspace/SpacesStore/"+fileId+"/"+fileName+"?a=true&alf_ticket="+ticket);
+		request.setAttribute("file", "http://52.19.4.0:8080/alfresco/download/attach/workspace/SpacesStore/"+fileId+"/"+fileName+"?ticket=");
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		response.setRenderParameter("jspPage","/html/alfresco/fileview.jsp");
 
@@ -150,7 +201,7 @@ String ticket="";
 			            newFile = new File(folder + sourceFileName);
 			             System.out.println("New file name: " + newFile.getName());
 			             System.out.println("New file path: " + newFile.getPath());
-			 
+			 /*
 			            InputStream in = new BufferedInputStream(uploadRequest.getFileAsStream("fileName"));
 			            FileInputStream fis = new FileInputStream(file);
 			            FileOutputStream fos = new FileOutputStream(newFile);
@@ -169,7 +220,7 @@ String ticket="";
 			            System.out.println("file size Mb:" + size / 1048576);
 			 
 			             System.out.println("File created: " + newFile.getName());
-			            SessionMessages.add(actionRequest, "success");
+			            SessionMessages.add(actionRequest, "success");*/
 			 
 			        } catch (FileNotFoundException e) {
 			            System.out.println("File Not Found.");

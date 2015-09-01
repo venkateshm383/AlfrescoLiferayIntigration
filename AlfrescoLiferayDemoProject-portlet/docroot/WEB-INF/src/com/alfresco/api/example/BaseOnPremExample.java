@@ -78,6 +78,8 @@ public class BaseOnPremExample extends BasePublicAPIExample {
 			List<Repository> repositories = factory.getRepositories(parameter);
 	
 			cmisSession = repositories.get(0).createSession();
+		
+			
 		}
 		return this.cmisSession;
 	}
